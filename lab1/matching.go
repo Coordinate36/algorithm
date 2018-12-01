@@ -111,15 +111,13 @@ func isStableMatch() bool {
 }
 
 func main() {
+
+	// redirect stdin
 	inFile, err := os.Open(INFILE)
 	if err != nil {
 		panic(err)
 	}
 	defer inFile.Close()
-
-	oldStdin := os.Stdin
-	defer func() { os.Stdin = oldStdin }()
-
 	os.Stdin = inFile
 
 	var numTests int
