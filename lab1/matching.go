@@ -5,9 +5,12 @@ import (
 	"os"
 )
 
-var hospitalPrefs, studPrefs map[int][]int
-var studRanks, hospitalRanks [][]int
-var studMatches, hospitalMatches []int
+var hospitalPrefs map[int][]int // every hospital's preference list
+var studPrefs map[int][]int     // every student's preference list
+var studRanks [][]int           // every student's rank in every hospital's preference list
+var hospitalRanks [][]int       // every hospital's rank in every student's preference list
+var studMatches []int           // studMatches[i] is the hospital that student i is matched to
+var hospitalMatches []int       // hospitalMatches[i] is the lowest-rank student who is matched to hospital i
 
 const INFILE = "/Users/coordinate36/program/algorithm/lab1/matching.txt"
 
@@ -32,6 +35,7 @@ func input() {
 			studPrefs[i] = append(studPrefs[i], tmp)
 		}
 	}
+	fmt.Scanln()
 }
 
 func match() {
@@ -44,6 +48,7 @@ func match() {
 		studMatches[stud] = -1
 	}
 
+	// get every hospital's rank in every student's preference list
 	hospitalRanks = make([][]int, numStuds)
 	for stud := range hospitalRanks {
 		hospitalRanks[stud] = make([]int, numHospitals)
@@ -57,7 +62,7 @@ func match() {
 		shouldContinue = false
 		for hospital := range hospitalMatches {
 			if hospitalMatches[hospital] > hospital || hospitalMatchHist[hospital] >= numStuds {
-				// size >= capicaty
+				// size >= capicaty or has proposed to every student
 				continue
 			}
 			shouldContinue = true
@@ -99,7 +104,8 @@ func isStableMatch() bool {
 	for hospital := 0; hospital < numHospitals; hospital++ {
 		for stud := 0; stud < numStuds; stud++ {
 			matchedStud, matchedHospital := worstMatchedStuds[hospital], studMatches[stud]
-			if (matchedStud == -1 || studRanks[hospital][stud] < studRanks[hospital][matchedStud]) && hospitalRanks[stud][hospital] < hospitalRanks[stud][matchedHospital] {
+			if (matchedStud == -1 || studRanks[hospital][stud] < studRanks[hospital][matchedStud]) &&
+				hospitalRanks[stud][hospital] < hospitalRanks[stud][matchedHospital] {
 				fmt.Println(studMatches)
 				fmt.Println("Unstable match", hospital, stud)
 				return false
@@ -122,6 +128,7 @@ func main() {
 
 	var numTests int
 	fmt.Scanf("%d", &numTests)
+	fmt.Scanln()
 
 	for i := 0; i < numTests; i++ {
 		input()

@@ -9,7 +9,7 @@ import (
 const INFILE = "/Users/coordinate36/program/algorithm/lab1/interval.txt"
 
 type Lecture struct {
-	start, finish int
+	start, finish float32
 }
 
 type ByStart []Lecture
@@ -42,11 +42,12 @@ func input() []Lecture {
 	fmt.Scanf("%d", &numLectures)
 	lectures := make([]Lecture, numLectures)
 	for i := 0; i < numLectures; i++ {
-		fmt.Scanf("%d", &(lectures[i].start))
+		fmt.Scanf("%f", &lectures[i].start)
 	}
 	for i := 0; i < numLectures; i++ {
-		fmt.Scanf("%d", &(lectures[i].finish))
+		fmt.Scanf("%f", &lectures[i].finish)
 	}
+	fmt.Scanln()
 	return lectures
 }
 
@@ -61,11 +62,15 @@ func main() {
 
 	var numTests int
 	fmt.Scanf("%d", &numTests)
+	fmt.Scanln()
 
 	for i := 0; i < numTests; i++ {
 		data := input()
 		rsts := schedule(data)
-		fmt.Println(data)
-		fmt.Println(rsts)
+		fmt.Printf("Test%d:\n", i+1)
+		for i, rst := range rsts {
+			fmt.Printf("%dth classroom: %v\n", i+1, rst)
+		}
+		fmt.Println()
 	}
 }
