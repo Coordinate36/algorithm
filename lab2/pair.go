@@ -128,6 +128,14 @@ func closestPair(points []Point) Pair {
 	return closestPairRec(PX, PY, len(points))
 }
 
+func isClosestPair(points []Point, pair Pair) bool {
+	best := bruteforce(points, len(points))
+	if best.Distance < pair.Distance {
+		return false
+	}
+	return true
+}
+
 func main() {
 
 	// redirect stdin
@@ -146,10 +154,10 @@ func main() {
 		points := input()
 		pair := closestPair(points)
 		fmt.Printf("Closest point pair: %v %v. Distance: %v\n", pair.A, pair.B, math.Sqrt(float64(pair.Distance)))
-		if bruteforce(points, len(points)).Distance < pair.Distance {
-			fmt.Println("Error!")
-		} else {
+		if isClosestPair(points, pair) {
 			fmt.Println("OK!")
+		} else {
+			fmt.Println("Error!")
 		}
 	}
 }
