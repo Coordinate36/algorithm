@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int partition(int *input, int left, int right) {
+int partition1(int *input, int left, int right) {
     int pivot = (input[left] + input[right]) / 2;
     while (left < right) {
         while (input[left] < pivot) {
@@ -11,11 +11,22 @@ int partition(int *input, int left, int right) {
         while (input[right] > pivot) {
             --right;
         }
-        if (left < right) {
+        if (left <= right) {
             swap(input[left++], input[right--]);
         }
     }
     return left;
+}
+
+int partition(int *input, int left, int right) {
+    int pivot = (input[left] + input[right]) >> 1;
+    int i = left - 1;
+    for (int j = left; j <= right; j++) {
+        if (input[j] <= pivot) {
+            swap(input[++i], input[j]);
+        }
+    }
+    return min(i + 1, right);
 }
 
 int quick_select(int *input, int low, int high, int k) {
